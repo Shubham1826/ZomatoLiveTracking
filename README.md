@@ -1,4 +1,4 @@
-# 📦 Zomato Live Tracking System
+# Zomato Live Tracking System
 
 A **real-time delivery tracking system** inspired by Zomato/Swiggy, built using an **event-driven architecture** with Kafka, Redis, WebSockets, and JWT-based authentication.
 
@@ -6,7 +6,7 @@ This project demonstrates how large-scale food delivery platforms stream live ri
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 - Real-time rider location updates
 - Event-driven architecture using Kafka
@@ -18,7 +18,7 @@ This project demonstrates how large-scale food delivery platforms stream live ri
 
 
 
-## 🧩 Services
+## Services
 
 | Service | Description |
 |---------|------------|
@@ -29,12 +29,12 @@ This project demonstrates how large-scale food delivery platforms stream live ri
 | kafka | Event streaming backbone |
 | redis | WebSocket connection routing |
 
-## 🧱 Architecture Overview
+## Architecture Overview
 
 ![System Architecture](docs/images/architecture.png)
 
 
-## 🔐 Roles & Authorization
+## Roles & Authorization
 
 | Role | Permissions |
 |----|------------|
@@ -47,9 +47,9 @@ Authorization is enforced via **JWT middleware**.
 
 ---
 
-## 🧪 How to Run the Project Locally
+## How to Run the Project Locally
 
-### 1️⃣ Prerequisites
+### Prerequisites
 
 Make sure you have:
 - Docker & Docker Compose
@@ -58,7 +58,7 @@ Make sure you have:
 
 ---
 
-### 2️⃣ Clone the Repository
+### Clone the Repository
 
 ```bash
 git clone git@github.com:Shubham1826/ZomatoLiveTracking.git
