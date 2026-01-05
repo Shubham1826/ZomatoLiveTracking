@@ -23,7 +23,6 @@ func Consume() {
 		var event LocationEvent
 		json.Unmarshal(m.Value, &event)
 
-		// 🔥 FETCH FROM REDIS
 		key := "ws:order:" + event.OrderID
 		connIDs, _ := rdb.SMembers(context.Background(), key).Result()
 
