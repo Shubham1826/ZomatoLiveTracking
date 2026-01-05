@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Live Locations</h2>
+<pre id="out"></pre>
+
+<script>
+const ws = new WebSocket("ws://localhost:8090/ws?order_id=order123");
+
+ws.onmessage = (e) => {
+  document.getElementById("out").innerText = e.data;
+};
+</script>
+</body>
+</html>

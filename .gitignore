@@ -1,0 +1,22 @@
+# Binaries
+producer/producer
+consumer/consumer
+*.exe
+
+# Go
+vendor/
+*.test
+
+# Environment files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Docker
+*.log
