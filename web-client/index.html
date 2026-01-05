@@ -1,15 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Order Tracking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 12px;
+      padding: 24px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: #38bdf8;
+      color: #020617;
+    }
+
+    button:disabled {
+      background: #64748b;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    .status.connected {
+      color: #22c55e;
+    }
+
+    .status.disconnected {
+      color: #ef4444;
+    }
+
+    pre {
+      background: #020617;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      max-height: 260px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      border: 1px solid #1e293b;
+    }
+
+    footer {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 480px) {
+      .input-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
 <body>
-<h2>Live Locations</h2>
-<pre id="out"></pre>
+  <div class="card">
+    <h2>📍 Live Order Tracking</h2>
 
-<script>
-const ws = new WebSocket("ws://localhost:8090/ws?order_id=order123");
+    <div class="input-group">
+      <input
+        type="text"
+        id="orderIdInput"
+        placeholder="Enter Order ID (e.g. order123)"
+      />
+      <button id="connectBtn">Start Tracking</button>
+    </div>
 
-ws.onmessage = (e) => {
-  document.getElementById("out").innerText = e.data;
-};
-</script>
+    <div id="status" class="status disconnected">
+      🔴 Not Connected
+    </div>
+
+    <pre id="out">No data yet...</pre>
+
+    <footer>
+      © Shubham Raj
+    </footer>
+  </div>
+
+  <script>
+    let ws = null;
+
+    const statusEl = document.getElementById("status");
+    const outEl = document.getElementById("out");
+    const btn = document.getElementById("connectBtn");
+
+    function setStatus(connected, msg) {
+      statusEl.textContent = msg;
+      statusEl.className = "status " + (connected ? "connected" : "disconnected");
+    }
+
+    btn.addEventListener("click", () => {
+      const orderId = document.getElementById("orderIdInput").value.trim();
+
+      if (!orderId) {
+        alert("Please enter an Order ID");
+        return;
+      }
+
+      // Close previous connection if any
+      if (ws) {
+        ws.close();
+      }
+
+      const wsUrl = `ws://localhost:8090/ws?order_id=${orderId}`;
+      setStatus(false, "🟡 Connecting...");
+
+      ws = new WebSocket(wsUrl);
+
+      ws.onopen = () => {
+        setStatus(true, "🟢 Connected");
+        outEl.textContent = "Waiting for location updates...\n";
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          outEl.textContent =
+            `📦 Order: ${data.order_id}\n` +
+            `🚴 Partner: ${data.partner_id}\n` +
+            `📍 Latitude: ${data.lat}\n` +
+            `📍 Longitude: ${data.lng}\n` +
+            `⏱ Timestamp: ${new Date(data.timestamp * 1000).toLocaleTimeString()}\n\n`
+        } catch {
+          outEl.textContent = event.data;
+        }
+      };
+
+      ws.onerror = () => {
+        setStatus(false, "🔴 WebSocket Error");
+      };
+
+      ws.onclose = () => {
+        setStatus(false, "🔴 Disconnected");
+      };
+    });
+  </script>
 </body>
 </html>

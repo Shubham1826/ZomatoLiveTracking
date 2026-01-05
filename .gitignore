@@ -1,22 +1,76 @@
 # Binaries
 producer/producer
 consumer/consumer
+auth-service/auth-service
 *.exe
-
-# Go
-vendor/
+*.out
 *.test
 
-# Environment files
+# Build cache
+/vendor/
+/bin/
+
+# Go workspace
+go.work
+go.work.sum
+
+####################################
+# Environment / Secrets
+####################################
 .env
+.env.*
+*.pem
+*.key
+*.crt
 
-# OS files
-.DS_Store
-Thumbs.db
+####################################
+# Docker
+####################################
+docker-compose.override.yml
+*.log
 
-# IDE
+####################################
+# Databases
+####################################
+*.db
+*.sqlite
+*.sqlite3
+postgres-data/
+mongo-data/
+redis-data/
+
+####################################
+# IDE / Editor
+####################################
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Docker
-*.log
+####################################
+# OS Specific
+####################################
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+####################################
+# Node / Frontend (if extended later)
+####################################
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+####################################
+# Temporary / Misc
+####################################
+tmp/
+temp/
+.cache/
